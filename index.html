@@ -1,0 +1,123 @@
+import { useState, useEffect } from "react";
+import { ShoppingBag, Heart, Search } from "lucide-react";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+
+// Use default product data for now
+const defaultProducts = [
+  { id: 1, name: "Trendy Handbag", img: "/images/product1.jpg" },
+  { id: 2, name: "Smart Watch", img: "/images/product2.jpg" },
+  { id: 3, name: "Modern Sneakers", img: "/images/product3.jpg" },
+  { id: 4, name: "Wireless Headphones", img: "/images/product4.jpg" },
+  { id: 5, name: "Stylish Sunglasses", img: "/images/product5.jpg" },
+];
+
+export default function quicKhabaar() {
+  const [search, setSearch] = useState("");
+  const [products, setProducts] = useState([]);
+
+  // Load default products on mount
+  useEffect(() => {
+    setProducts(defaultProducts);
+  }, []);
+
+  const filteredProducts = products.filter((p) =>
+    p.name.toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow-md p-4 flex justify-between items-center sticky top-0 z-50">
+        <h1 className="text-2xl font-bold text-pink-600">quicKhabaar</h1>
+        <div className="flex items-center gap-2">
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="px-3 py-2 border rounded-xl outline-none w-60"
+          />
+          <Search className="text-gray-500" />
+        </div>
+        <div className="flex gap-4">
+          <Heart className="cursor-pointer text-gray-600 hover:text-pink-600" />
+          <ShoppingBag className="cursor-pointer text-gray-600 hover:text-pink-600" />
+        </div>
+      </header>
+
+      {/* Hero Carousel */}
+      <section className="bg-pink-100 text-center py-12">
+        <motion.h2
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-4xl font-extrabold text-pink-700 mb-6"
+        >
+          Discover the Latest Trends ✨
+        </motion.h2>
+
+        <div className="max-w-4xl mx-auto">
+          <Carousel
+            autoPlay
+            infiniteLoop
+            showThumbs={false}
+            showStatus={false}
+            interval={3000}
+          >
+            <div>
+              <img src="/images/banner1.jpg" alt="Banner 1" />
+            </div>
+            <div>
+              <img src="/images/banner2.jpg" alt="Banner 2" />
+            </div>
+            <div>
+              <img src="/images/banner3.jpg" alt="Banner 3" />
+            </div>
+          </Carousel>
+        </div>
+
+        <p className="mt-6 text-gray-700 max-w-2xl mx-auto">
+          Welcome to <span className="font-semibold text-pink-600">quicKhabaar</span>, your one-stop shop for trendy fashion, lifestyle, and gadgets. Update images and products anytime easily.
+        </p>
+      </section>
+
+      {/* Product Grid */}
+      <main className="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {filteredProducts.map((product) => (
+          <motion.div
+            key={product.id}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Card className="rounded-2xl shadow-lg hover:shadow-2xl transition overflow-hidden">
+              <img
+                src={product.img}
+                alt={product.name}
+                className="w-full h-64 object-cover"
+              />
+              <CardContent className="p-4 flex flex-col items-center">
+                <h3 className="font-semibold text-lg">{product.name}</h3>
+                <Button className="mt-3 w-full rounded-xl bg-pink-600 hover:bg-pink-700">
+                  Add to Cart
+                </Button>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-gray-800 text-white text-center py-6 mt-10">
+        <p>© {new Date().getFullYear()} quicKhabaar. All Rights Reserved.</p>
+        <p className="text-gray-400 text-sm mt-2">
+          Trendy fashion, lifestyle, and gadgets. Fully editable and future-ready.
+        </p>
+      </footer>
+    </div>
+  );
+}
